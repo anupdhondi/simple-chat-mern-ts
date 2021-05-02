@@ -5,13 +5,21 @@ import User from "./models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-//initialize web socket server
+//initialize web socket
 import "./websocket";
-import { JWT_SECRET_TOKEN } from "./utility";
 
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/chat-mern-ec2");
+const JWT_SECRET_TOKEN = "fusdgjkfdshjbvfsdhjfvsdhjv1213vhjvdshjfvsjh";
+
+const PRODUCTION = process.env.NODE_ENV === "production";
+
+if (PRODUCTION) {
+  app.use(express.static("/home/ubuntu/webapp/client/build"));
+  mongoose.connect("mongodb://localhost:27017/chat-mern-ec2");
+} else {
+  mongoose.connect("mongodb://localhost:27017/chat-mern-ec2");
+}
 
 if (process.env.NODE_ENV !== "production") {
   app.use(cors());
